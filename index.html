@@ -3,25 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <title>Avided Paste</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    #pasteLink {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
 </head>
 <body>
   <h1>Avided Paste</h1>
 
-  <form>
+  <form id="pasteForm">
     <label>Title:</label><br>
-    <input type="text" id="title"><br><br>
+    <input type="text" id="title" required><br><br>
 
     <label>Code:</label><br>
-    <textarea id="code" rows="10" cols="30"></textarea><br><br>
+    <textarea id="code" rows="10" cols="30" required></textarea><br><br>
 
     <label>Tags:</label><br>
-    <input type="text" id="tags"><br><br>
+    <input type="text" id="tags" required><br><br>
 
     <label>Expiration Date:</label><br>
     <input type="datetime-local" id="expiration"><br><br>
 
+    <label>Custom Code (optional):</label><br>
+    <input type="text" id="customCode"><br><br>
+
     <button type="submit">Publish</button>
   </form>
 
+  <div id="pasteLink"></div>
+
+  <script>
+    document.getElementById('pasteForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Récupérer les données du formulaire
+      const title = encodeURIComponent(document.getElementById('title').value);
+      const code = encodeURIComponent(document.getElementById('code').value);
+      const tags = encodeURIComponent(document.getElementById('tags').value);
+      const expiration = document.getElementById('expiration').value;
+      const customCode = encodeURIComponent(document.getElementById('customCode').value || Date.now()); // Si aucun code, utiliser la date comme ID
+
+      // Créer un lien unique avec les données du paste
+      const pasteLink = `https://tonsite.github.io/?code=${customCode}&title=${title}&code_content=${code}&tags=${tags}&expiration=${expiration}`;
+
+      // Afficher le lien à l'utilisateur
+      document.getElementById('pasteLink').innerHTML = `Your paste is live! View it here: <a href="${pasteLink}" target="_blank">${pasteLink}</a>`;
+
+      // Réinitialiser le formulaire
+      document.getElementById('pasteForm').reset();
+    });
+  </script>
 </body>
 </html>
